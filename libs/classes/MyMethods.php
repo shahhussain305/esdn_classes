@@ -593,7 +593,7 @@
 				}
 
 			//function to show global error msg
-			 function errorMsg($InfoTxt='Error',$msg){
+			 function errorMsg($InfoTxt='Error',$msg=""){
 				try{
 					 return '<div class="alert alert-danger alert-dismissable fade in"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'.$InfoTxt.' '.$msg.'</div>';
 					 }catch(Exception $exc){
@@ -603,7 +603,7 @@
 				 }
 
 			//function to show global warning msg
-			 function warningMsg($InfoTxt='Error',$msg){
+			 function warningMsg($InfoTxt='Error',$msg=""){
 				try{
 					 return '<div class="alert alert-warning alert-dismissable fade in"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'.$InfoTxt.' '.$msg.'</div>';
 					 }catch(Exception $exc){
@@ -613,7 +613,7 @@
 				 }
 
 			//function to show global successfully Done msg
-			 function sucMsg($InfoTxt='Information',$msg){
+			 function sucMsg($InfoTxt='Information',$msg=""){
 				try{
 					return '<div class="alert alert-success alert-dismissable fade in"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'.$InfoTxt.' '.$msg.'</div>';
 				 	}catch(Exception $exc){
@@ -744,7 +744,7 @@
 		$boxFooter = footer of the lightbox if empty the default will be displayed
 		$panelColor = 1 => default, 2=> success, 3=> primary, 4=> warning, 5=> danger
 	*/
-	public function modelBox($boxTitle='',$msgId,$panelColor='1',$boxFooter='ESDN www.esdn.com.pk'){
+	public function modelBox($boxTitle='',$msgId='box',$panelColor='1',$boxFooter='ESDN www.esdn.com.pk'){
 		try{
 			$style = 'style="border-radius: 7px 7px 0 0;"';
 			$classPnl = 'alert-default';
@@ -793,7 +793,7 @@
                 /***
          * Modal box for bootstrap 4 version 
          */
-        public function modelBox2($boxTitle='',$msgId,$modal_id="basicModal",$panelColor='1',$modal_dialog_scrollable="",$boxFooter='ESDN www.esdn.com.pk'){
+        public function modelBox2($boxTitle='',$msgId='box',$modal_id="basicModal",$panelColor='1',$modal_dialog_scrollable="",$boxFooter='ESDN www.esdn.com.pk'){
 		try{
 			$style = 'style="border-radius: 7px 7px 0 0;"';
 			$classPnl = 'alert-default';
