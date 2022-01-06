@@ -307,7 +307,10 @@ class CRUD{
 		/**
                  * this function will initiate beginTransaction() and will commit after finishing querying 
 		the tables successfully, while it will not save / commit any changes made via any query if there
-		is any error occur in any query, means rollback() will occur in catch() block*/
+		is any error occur in any query, means rollback() will occur in catch() block.
+		Here is one defeciancy in the dbTransaction() function, that is, it do not allow you to use this function in 
+		a scenario where you need to get last_inserted_id() etc or need anything else from the previous record.
+		*/
 		public function dbTransaction($sqlsArray= array()){
 			$flag = false;
 			try{
@@ -331,6 +334,67 @@ class CRUD{
 			$this->con = null;
 			return $flag;
 		}
+	
+	        /** ---------Start implicit transactions----------- 
+		 * First start the code with : try{}catch(){}
+		 * in the:
+		 * 		try{ //call the beginTransactions()  
+		 * 			$db->beginTransaction();
+		 * 			//then call: 
+		 * 				$db->dbQueryTrans() 
+		 * 					or 
+		 * 				$db->getValueTrans() 
+		 * 			//then call:
+		 * 				$db->commitTransaction()  
+		 * 			}catch(PDOException $exc){
+		 * 				$db->rollBackTransaction();
+		 * 				$this->TempVar = $exc;
+		 * 			}catch(Exception $ex){
+		 * 				$db->rollBackTransaction();
+		 * 				$this->TempVar = $ex;
+		 * 			}
+		 * 
+		*/
+		public function beginTransactions(){
+			$this->connect();
+			$this->con->beginTransaction();
+		}
+		public function commitTransaction(){
+			$this->con->commit();
+		}
+		public function rollBackTransaction(){
+			$this->con->rollBack();
+		}
+
+		public function getValueTrans($sql,$bindVars=array()){
+			try{			
+				$statement = $this->con->prepare($sql);
+				$statement->execute($bindVars);
+				$this->sqlToReturn = $sql;
+				return $statement->fetchColumn();
+				}catch(PDOException $ex){
+					$this->tempVar = $ex->getMessage(); 
+				}
+			}		
+		
+		public function dbQueryTrans($sql,$bindVars=array()){
+			try{
+				$statement = $this->con->prepare($sql);
+				$statement->execute($bindVars);
+				$this->sqlToReturn = $sql;
+				if($statement->rowCount() > 0){
+					return true;
+					}
+				else{
+					return false;
+					}
+				}catch(PDOException $exc){
+					$this->tempVar = $exc->getMessage(); //for debugging purpose only
+					return false;
+					}
+			}
+		/*---------End Implicit Transactions--------*/
+	
 		/**
                  * hitCounter() function takes no @params 
 			This function simply checks if session is not already started it will start session
