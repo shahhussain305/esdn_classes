@@ -133,5 +133,31 @@ class SG{
 			$sgVar = $exc->getMessage();  
 			return false;	
 			}
+		}//fucntion to create bootstrap 5.2 card with rows details
+	//echo(SG::create_card('Administration Dashboard'));   
+	//contents goes here
+	//SG::end_card();
+	public static function create_card($titleText,$card_bg='bg-dark text-white',$cardColor='text-bg-light',$style='style="width:80%; margin:0 auto;"'){
+		try{
+			$start = '<div class="card '.$cardColor.'" '.$style.'>
+						<div class="card-header'.$card_bg.'">'.htmlspecialchars_decode($titleText).'</div>
+						<div class="card-body">
+							<div class="container">
+									<div class="row">';
+
+			return $start;
+		}catch(Exception $exc){
+			$sgVar = $exc->getMessage();  
+			return false;
+		}
+	}
+	//fucntion to create bootstrap 5.2 card with rows details
+	public static function end_card(){
+		try{
+			return '</div></div></div></div>';
+		}catch(Exception $exc){
+			$sgVar = $exc->getMessage();  
+			return false;	
+			}
 		}
 }//end of class
