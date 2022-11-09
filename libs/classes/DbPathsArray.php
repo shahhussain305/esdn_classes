@@ -12,28 +12,30 @@
 class DBU {
     
     static $view_user = array(
-                                'user'=>'dmlld19vbmx5',
-                                'key'=>'VGVzdF9Vc2VyMSE=',
+                                'user'=>'ZXNkbl91c2Vy',
+                                'key'=>'ZXNkbl9wYXNzd29yZCEy',
                                 'host'=>'bG9jYWxob3N0',
-                                'db'=>'cGhjX2Nhc2VmbG93'
+                                'db'=>'ZXNkbl90ZXN0X2Ri'
                                 );
     static $dba_user = array(
-                                'user'=>'ZGJhX3VzZXI=',
-                                'key'=>'RGJBX1VzRXIxIQ==',
+                                'user'=>'ZXNkbl91c2Vy',
+                                'key'=>'ZXNkbl9wYXNzd29yZCEy',
                                 'host'=>'bG9jYWxob3N0',
-                                'db'=>'cGhjX2Nhc2VmbG93'
+                                'db'=>'ZXNkbl90ZXN0X2Ri'
                                 );
+
+//change the following as per user previliges
 //    static $view_user = array(
-//                                'user'=>'view_only',
-//                                'key'=>'Test_User1!',
+//                                'user'=>'esdn_user',
+//                                'key'=>'esdn_password!2',
 //                                'host'=>'localhost',
-//                                'db'=>'phc_caseflow'
+//                                'db'=>'esdn_test_db'
 //                                );
 //    static $dba_user = array(
-//                                'user'=>'dba_user',
-//                                'key'=>'DbA_UsEr1!',
+//                                'user'=>'esdn_user',
+//                                'key'=>'esdn_password!2',
 //                                'host'=>'localhost',
-//                                'db'=>'phc_caseflow'
+//                                'db'=>'esdn_test_db'
 //                                );
     
 }

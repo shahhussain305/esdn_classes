@@ -31,9 +31,9 @@ Step 1: Install Composer
 Step 2: Go to your website root directory and Run the following command
 	
 	$ 	composer require phpmailer/phpmailer
-*/ 
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
+*/
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 use PHPMailer\PHPMailer\PHPMailer;
 class Communicator{	
 	
@@ -47,14 +47,14 @@ class Communicator{
 				'abc5@example.com');
 	private $password="EMAIL-PASSWORD-COMMON-FOR-ALL-EMAIL-ADDRESSES";
 	public $replyTo="abc@example.com";
-	var $tempVar;
+	public $tempVar = "";
 		public $from_email='abc@example.com';
         public $from_name = 'NAME OF ORGANIZATION';
         public $charSet = "CharSet = 'UTF-8'";
         public $charSetOpt = 0;
 	//function to send email simple and with attachements
 	public function sendEmail($to,$from,$sender_name="",$subject,$body,$attachement_path="",$cc="",$bcc=""){ 
-			require '../../../../vendor/autoload.php';		
+			require 'vendor/autoload.php';		
 			$mail = new PHPMailer;
 			$mail->IsSMTP();            // set mailer to use SMTP i.e. smtp1.example.com;smtp2.example.com
 			$mail->Host = $this->host;  // specify main and backup server
@@ -96,8 +96,8 @@ class Communicator{
 			}
         //for multiple recipients                
         public function sendEmails($to=array(),$from,$sender_name="",$subject,$body,$attachement_path="",$cc="",$bcc=""){
-			$mail = new PHPMailer();*/
-			require '../../../../vendor/autoload.php';				
+			$mail = new PHPMailer();
+			require 'vendor/autoload.php';				
 			$mail = new PHPMailer;
 			$mail->IsSMTP();            // set mailer to use SMTP i.e. smtp1.example.com;smtp2.example.com
 			$mail->Host = $this->host;  // specify main and backup server
@@ -145,8 +145,8 @@ class Communicator{
 
            //for multiple/single recipient(s) and from random robots
            public function sendEmailRnd($to=array(),$sender_name="",$subject,$body,$attachement_path="",$cc="",$bcc=""){ 
-            		$sender_robot = $this->robots[array_rand($this->robots,1)];
-			require '../../../../vendor/autoload.php';				
+            $sender_robot = $this->robots[array_rand($this->robots,1)];
+			require 'vendor/autoload.php';				
 			$mail = new PHPMailer;
 			$mail->IsSMTP();            // set mailer to use SMTP i.e. smtp1.example.com;smtp2.example.com
 			$mail->Host = $this->host;  // specify main and backup server

@@ -58,25 +58,25 @@ class Communicator{
   3- Activate the two step varification
   4- under the two step varification, click on the app password, click on the first dropdwon and select Custom name and Type any name like PHPMailer etc
   */
-	private $host = "smtp.gmail.com";
-	private $userName="abcd1@gmail.com";
-	private $password="ywhstefdirkdfhen";
-    	private $robots = array(
-				array('abcd1@gmail.com','ywhstefdirkdfhen')
-				);
+  private $host = "smtp.gmail.com";
+  private $userName="esdn.test@gmail.com";
+  private $password="qdtagtpfjynbmzkj";
+	  private $robots = array(
+			  array('esdn.test@gmail.com','qdtagtpfjynbmzkj')
+			  );
 
-	public $from_email='abcd1@gmail.com';
-	//--------------------------------------------------------------//
-	public $replyTo="abcd1@gmail.com";
-	var $tempVar;
-    	public $from_name = 'NAME OF YOUR ORGANIZATION';
-    	public $charSet = "CharSet = 'UTF-8'";
-    	public $charSetOpt = 0;
+  public $from_email='esdn.test@gmail.com';
+  //--------------------------------------------------------------//
+  public $replyTo="esdn.test@gmail.com";
+  var $tempVar;
+	  public $from_name = 'esdn.com.pk';
+	  public $charSet = "CharSet = 'UTF-8'";
+	  public $charSetOpt = 0;
 	
-           //for multiple/single recipient(s) and from random robots
-           public function sendEmailRnd($to=array(),$sender_name="",$subject,$body,$attachement_path="",$cc="",$bcc=""){ 
+      //for multiple/single recipient(s) and from random robots
+      public function sendEmailRnd($to=array(),$sender_name="",$subject,$body,$attachement_path="",$cc="",$bcc=""){ 
 			$this->get_email_user($this->robots);
-			require '../../../../vendor/autoload.php';				
+			require 'vendor/autoload.php';				
 			$mail = new PHPMailer;
 			$mail->IsSMTP();            // set mailer to use SMTP i.e. smtp1.example.com;smtp2.example.com
 			$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;

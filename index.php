@@ -16,7 +16,7 @@ $db->getEmps();//calling of method directly from DB.php class
 echo("<hr>");//calling of method directly from CRUD.php class
 //--------------------------------------------------------------------------
 $user_name = isset($_GET["user_name"]) && !empty($_GET["user_name"]) ? trim($_GET["user_name"]) : 'Shah Hussain';
-$list = $db->getRecordSetFilled("SELECT CONCAT(emp_name,' S/O ',father_name) as emp_name FROM employees WHERE emp_name LIKE :emp_name ORDER BY sno DESC",array(":emp_name"=>'%'.$user_name.'%'));
+$list = $db->getRecordSetFilled("SELECT emp_name FROM employees WHERE emp_name LIKE :emp_name ORDER BY sno DESC",array(":emp_name"=>'%'.$user_name.'%'));
 echo("<b>Found total: ".count($list)."</b><br>");
 if(count($list) > 0){
     foreach($list as $v){
