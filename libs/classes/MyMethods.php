@@ -860,7 +860,32 @@
 			}
 		}	//modelBox()     
                 
-                
+        //modalbox for bootstrap 5.2
+	public function modalBox3($boxTitle='Peshawar High Court, Mingora Bench',$boxId='box',$modal_id="basicModal",$modal_dialog_scrollable="modal-dialog-scrollable",$boxFooter='ESDN www.esdn.com.pk'){
+		try{
+			$modal = 
+			'<div class="modal fade" id="'.$modal_id.'" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+				<div class="modal-dialog '.$modal_dialog_scrollable.' modal-dialog-centered">
+					<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="modal_title">'.$boxTitle.'</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div id="'.$boxId.'"></div>
+					</div>
+					<div class="modal-footer">
+						<span class="">'.$boxFooter.'</span>
+					</div>
+					</div>
+				</div>
+				</div>';
+				return $modal;
+		}catch(Exception $exc){
+			$this->tempVar = $exc->getMessage();
+				return false;
+		}
+	}        
                 
 	//function to iterate over jpg, png, bmp files in folder
 	public function imagesAry($dirName){
