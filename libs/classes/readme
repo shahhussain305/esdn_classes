@@ -1,1 +1,212 @@
-Classes folder
+# Classes folder
+# Example of how to use paginate class with form (having searching fields) and geting data using $.getSON()
+
+1- .JS file requesting the .php page for data
+
+function change_page(page_id){
+        try{
+                let caseno = $.trim($('#caseno').val());
+                let casetitle = $.trim($('#casetitle').val());
+                let caseyear = $.trim($('#caseyear').val());
+                let SubCategoryName = $.trim($('#SubCategoryName').val());
+                let CourtName = $.trim($('#CourtName').val());
+                if(caseno == "" && casetitle == "" && caseyear == "" && SubCategoryName == "" && CourtName == ""){
+                    $(".msg1").html(`<strong class='text-danger'>${new Public_Func().alertIcon} Please provide at least one field from the below options.</strong>`);       
+                }else{
+                    $("#page_cases_list").html('<strong class="text-danger">Loading...</strong>');
+                    $.getJSON("mod/mod_public/ajaxPhp/search_case_details.php",
+                             {
+                                page_id:page_id,
+                                caseno:caseno,
+                                casetitle:casetitle,
+                                caseyear:caseyear,
+                                SubCategoryName:SubCategoryName,
+                                CourtName:CourtName
+                            },
+                                function(res){
+                                    //-----------------------------------
+                                    $(".msg1").html('');
+                    let html = `<strong>Your Search Result is as Under . . . </strong>
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Case Title</th>
+                                    <th>Case No</th>
+                                    <th>Case Year</th>
+                                    <th>Institution Date</th>
+                                    <th>Category</th>
+                                    <th>Court</th>
+                                </tr>`;                   
+                        $(".result").html(html); 
+                   if(res['code'] == '2'){
+                        if(res['list']['CaseID'].length > 0){
+                            let row = 0;let counter = 0;
+                            if(page_id >= 1){
+                                counter = (25 * page_id) - 25;
+                            }
+                            for(; row <= res['list']['CaseID'].length - 1; row++){
+                                let id = (res['list']['CaseID'][row]);
+                                html += `<tr>
+                                                <td>${counter +=1}</td>
+                                                <td><a href="${location.origin}/${id}/case_history.phc" title="Click here to open full history of this case">
+                                                    ${res['list']['TitleEnglish'][row]}
+                                                    </a>                                        
+                                                </td>
+                                                <td>${res['list']['CaseNo'][row]}</td>
+                                                <td>${res['list']['CaseYear'][row]}</td>
+                                                <td>${res['list']['InstitutionDate'][row]}</td>
+                                                <td>${res['list']['SubCategoryName'][row]}</td>
+                                                <td>${res['list']['JudgeName'][row]}<br>
+                                                    ${res['list']['CourtName'][row]}
+                                                </td>
+                                            </tr>`;
+                                            }//for loop()
+                                            html += `</table><br>${res['paginate']}`;               
+                                            $(".result").html(html);
+                                        }//if data found
+                                    }else{//if res['cod']== 3=> no param was provided to search with
+                                    html += `<tr><td colspan="7">Please type some details about your case to search with</td></tr>`;
+                                    html += `</table>`;
+                                    $(".result").html(html); 
+                                    }
+                                });
+
+                               }   //----------------------------------
+                               
+        }catch(e){
+            console.log(e)
+        }
+    }
+
+
+2- Page to send the JSON encoded data back to the above js file:
+
+<?php ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+require_once('../../../libs/classes/App_DB.php');
+require_once("../../../libs/classes/DbPathsArray.php");
+require_once("../../../libs/classes/MyMethods.php");
+require_once("../../../libs/classes/paginate.php");
+$db = new App_DB(DBU::$dba_user);$method = new MyMethods();
+$caseno = "";$casetitle="";$caseyear="";$SubCategoryName="";$CourtName="";
+$param = array();  
+$search = '';
+$param1= array();$param2= array();$param3= array();$param4= array();$param5= array();
+if(isset($_GET['caseno']) && !empty($_GET['caseno'])){
+    $search .= ' AND CM.CaseNo = :caseno';
+    $param1 = array(':caseno'=>$_GET['caseno']);
+    $caseno = trim($_GET['caseno']);
+}
+if(isset($_GET['casetitle']) && !empty($_GET['casetitle'])){
+    $search .= ' AND CM.TitleEnglish LIKE :casetitle';
+    $param2 = array(':casetitle'=>$_GET['casetitle'] . '%');
+    $casetitle = trim($_GET['casetitle']);
+}
+if(isset($_GET['caseyear']) && !empty($_GET['caseyear'])){
+    $search .= ' AND CM.CaseYear = :caseyear';
+    $param3 = array(':caseyear'=>$_GET['caseyear']);
+    $caseyear = trim($_GET['caseyear']);
+}
+if(isset($_GET['SubCategoryName']) && !empty($_GET['SubCategoryName'])){
+    $search .= ' AND CM.SubCategoryID = :SubCategoryName';
+    $param4 = array(':SubCategoryName'=>$_GET['SubCategoryName']);
+    $SubCategoryName = trim($_GET['SubCategoryName']);
+}
+if(isset($_GET['CourtName']) && !empty($_GET['CourtName'])){
+    $search .= ' AND CM.CourtID = :CourtName';
+    $param5 = array(':CourtName'=>intval($_GET['CourtName']));
+    $CourtName = intval($_GET['CourtName']);
+}
+$param = array_merge($param1,$param2,$param3,$param4,$param5);
+if($caseno == "" && $casetitle == "" && $caseyear == "" && $SubCategoryName == "" && $CourtName == ""){
+    echo(json_encode(array('code'=>3)));//no parameter was set
+}else{
+   $sqlCount = "SELECT COUNT(CM.CaseID) as total
+                FROM CFMISCaseMain CM 
+                        INNER JOIN dbo.Courts C ON CM.CourtID = C.CourtID
+                        INNER JOIN dbo.Judges J ON CM.JudgeID = J.JudgeID
+                        INNER JOIN dbo.CFMISCategories CAT ON CM.CategoryID = CAT.CategoryID
+                        INNER JOIN dbo.CFMISSubCategories SC ON CM.SubCategoryID = SC.SubCategoryID AND 
+                        CAT.CategoryID = SC.CategoryID
+                WHERE 1 = 1 ".$search;
+    $totalRec = $db->getValue($sqlCount,$param);
+                        $pagi = new Paginate($totalRec,25,2,true,array('caseno','casetitle','caseyear','SubCategoryName','CourtName'));
+                        $pagi->paginater('change_page');
+    if($totalRec > 0){     
+     
+        $sql = "SELECT CM.CaseID,CM.CaseNo,CM.CaseYear,CM.InstitutionDate,CM.CategoryID, CAT.CategoryName, 
+                        CM.SubCategoryID, SC.SubCategoryName, CM.CourtID, C.CourtName, CM.JudgeID, J.JudgeName,
+                        CM.CourtFee, CM.Pray, CM.DeleteStatus, CM.TitleEnglish, CM.TitleUrdu, CM.DisposalDate, CM.CaseStatusID
+                FROM CFMISCaseMain CM 
+                    INNER JOIN dbo.Courts C ON CM.CourtID = C.CourtID
+                    INNER JOIN dbo.Judges J ON CM.JudgeID = J.JudgeID
+                    INNER JOIN dbo.CFMISCategories CAT ON CM.CategoryID = CAT.CategoryID
+                    INNER JOIN dbo.CFMISSubCategories SC ON CM.SubCategoryID = SC.SubCategoryID AND CAT.CategoryID = SC.CategoryID
+                WHERE 1 = 1 ".$search." ORDER BY CM.CaseID ASC OFFSET ".intval($pagi->start)." ROWS FETCH NEXT ".intval($pagi->records_per_page)." ROWS ONLY";
+        $list_cases = $db->getRecordSetFilled($sql,$param);
+         if(isset($list_cases) && is_array($list_cases) && count($list_cases) > 0){ 
+            $list_cases_ary = array();  
+            foreach($list_cases as $row){
+                $list_cases_ary['CaseID'][] = $row['CaseID'];
+                $list_cases_ary['CaseNo'][] = $row['CaseNo'];
+                $list_cases_ary['CaseYear'][] = $row['CaseYear'];
+                $list_cases_ary['InstitutionDate'][] = $method->dateDMY($row['InstitutionDate']);
+                $list_cases_ary['CategoryName'][] = $row['CategoryName'];
+                $list_cases_ary['SubCategoryName'][] = $row['SubCategoryName'];
+                $list_cases_ary['CourtID'][] = $row['CourtID'];
+                $list_cases_ary['CourtFee'][] = $row['CourtFee'];
+                $list_cases_ary['CaseStatusID'][] = $row['CaseStatusID'];
+                $list_cases_ary['JudgeID'][] = $row['JudgeID'];
+                $list_cases_ary['DeleteStatus'][] = $row['DeleteStatus'];
+                $list_cases_ary['Pray'][] = $row['Pray'];
+                $list_cases_ary['CourtName'][] = $row['CourtName'];
+                $list_cases_ary['JudgeName'][] = $row['JudgeName'];
+                $list_cases_ary['TitleEnglish'][] = $row['TitleEnglish'];
+                $list_cases_ary['TitleUrdu'][] = $row['TitleUrdu'];
+                $list_cases_ary['DisposalDate'][] = $row['DisposalDate'];
+            }
+            echo(json_encode(array('code'=>2,'paginate'=>$pagi->pagination,'list'=>$list_cases_ary)));//list of cases
+        }else{
+            echo(json_encode(array('code'=>1,'sql'=>$db->tempVar)));//no data found
+        }        
+    }else{
+        echo(json_encode(array('code'=>4,'sql'=>$db->tempVar)));//no data found
+    }
+    }//if param were set
+
+
+3- HTML Markup page with form for searching records:
+
+<div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-1">
+                <input type="text" id="casetitle" placeholder="Case Title e.g. Sajjad VS Aslam" class="form-control"></div>
+            <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-1">
+                <input type="text" id="caseno" placeholder="Case Number e.g. 13/6" class="num_only form-control"></div>
+            <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-1">
+                <select name="caseyear" id="caseyear" class="form-select user-select-all">
+                <option value="">Select Year</option>
+                <?php for($yr=date('Y'); $yr>=1940; $yr--){ ?>
+                    <option value="<?php echo($yr); ?>"><?php echo($yr); ?></option>    
+                <?php } ?>
+            </select>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-1">
+               <select name="SubCategoryID" id="SubCategoryName" class="form-select user-select-all">
+                    <option value="">Select Case Category</option>
+                    <?php echo($db->fillCombo("SELECT ct.SubCategoryID,  CONCAT(ct.SubCategoryName, ' - ', 
+       						CASE ct.OfficeTypeID WHEN 1 THEN 'DSJ/ADSJ' ELSE 'CJ/JM/SCJ' END) as SubCategoryName 
+                        	FROM CFMISSubCategories ct ORDER BY ct.SubCategoryName,ct.OfficeTypeID",
+                        	"SubCategoryID","SubCategoryName",array(),'0')); ?>
+                </select>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-1">
+                <select name="CourtID" id="CourtName" class="form-select user-select-all">
+                    <option value="">Select Court</option>
+                    <?php echo($db->fillCombo("SELECT CourtID,CourtName FROM Courts WHERE OfficeTypeID in (1,2) AND Status = 1 
+                    							ORDER BY OfficeTypeID","CourtID","CourtName",array(),'0')); ?>
+                </select>
+            <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3 col-xxl-3 mb-1"></div>
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6 mb-1">            
+                <input type="button" value="View" class="btn btn-success w-35 float-end" onclick="change_page(0);">
+            </div>
+        </div>
