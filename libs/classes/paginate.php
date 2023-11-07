@@ -22,10 +22,17 @@ class Paginate{
 	//$totalRecords = $db->getValue("SELECT COUNT(sno) as total FROM institution ORDER BY sno");
         if($this->is_search_enabled){
             //$this->searching_val = ",$('#".$this->input_field."').val()";
-            $this->searching_val = ',$("#'.$this->input_field.'").val()';
+            //$this->searching_val = ',$("#'.$this->input_field.'").val()';
+			if(is_array($this->input_field)){
+				for($pg = 0; $pg<=count($this->input_field) - 1; $pg++){
+					$this->searching_val .= ',$("#'.$this->input_field[$pg].'").val()';
+				}
+			}else{
+				$this->searching_val = ',$("#'.$this->input_field.'").val()';
+			}
         }
         //echo("<textarea>".$this->searching_val."</textarea>");
-	$page = (int) (isset($_POST['page_id']) ? $_POST['page_id'] : 1);
+	$page = (int) (isset($_REQUEST['page_id']) ? $_REQUEST['page_id'] : 1);
 	$page = ($page == 0 ? 1 : $page);
 	$this->start = ($page-1) * $this->records_per_page;
 
@@ -118,4 +125,3 @@ class Paginate{
 	  }
 	}
 }
-?>
