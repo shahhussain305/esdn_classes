@@ -76,4 +76,51 @@ Create index.php file in your root directory and use the following testing code:
                     <input type="submit" name="btn" value="Submit">
                 </form>
 
-That's all....for databases section
+
+
+/*---------CSS for Paginate Class--------------*/
+/*-------Pagination-----------------*/
+div.pagination {
+	padding: 3px 3px 3px 2px;
+	margin: 3px;
+	text-align:left;
+	font-family:tahoma;
+	font-size:12px;
+    line-height: 2.5;
+}
+
+div.pagination a {
+	padding: 4px 5px;
+	margin: 2px;
+	border: 1px solid #25b51b;
+	text-decoration: none;
+	color: #25b51b;
+	border-radius:3px;
+}
+div.pagination a:hover, div.digg a:active {
+	border: 1px solid #25b51b;
+	color: #f5f3f3;
+	border-radius:3px;
+	background-color: #25b51b;
+}
+div.pagination span.current {
+	padding: 4px 5px;
+	margin: 2px;
+	border: 1px solid #25b51b;
+	font-weight: bold;
+	background-color: #25b51b;
+	color: #FFF;
+	border-radius:3px;
+}
+div.pagination span.disabled {
+	padding: 4px 5px;
+	margin: 2px;
+	border: 1px solid #cccccc;
+	color: #777;
+}
+
+/*---------End Pagination--------------*/
+
+
+
+That's all....for the databases section
