@@ -1169,7 +1169,7 @@
 	*/
   	function zipDownload($file_names,$file_path){
 		try{
-			include("zip_min.inc");
+			include("zip_min.php");
 			$zipfile = new zipfile();
 			$zip_file_name = date('Y-m-d-h-i-s').'_attachement.zip';
 			$filePathAry = explode("/",$file_path);
