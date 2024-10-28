@@ -1,5 +1,4 @@
-<?php
-/**
+<?php /**
  * Description of DBU class=> Database Users Class collects existing users to connect to target database by 
  * providing user, password, host and database name
  * Benefits of DBU class=> 
@@ -12,30 +11,15 @@
 class DBU {
     
     static $view_user = array(
-                                'user'=>'ZXNkbl91c2Vy',
-                                'key'=>'ZXNkbl9wYXNzd29yZCEy',
+                                'user'=>'cm9vdA==',
+                                'key'=>'U3dhdEAxMjM0',
                                 'host'=>'bG9jYWxob3N0',
                                 'db'=>'ZXNkbl90ZXN0X2Ri'
                                 );
     static $dba_user = array(
-                                'user'=>'ZXNkbl91c2Vy',
-                                'key'=>'ZXNkbl9wYXNzd29yZCEy',
+                                'user'=>'cm9vdA==',
+                                'key'=>'U3dhdEAxMjM0',
                                 'host'=>'bG9jYWxob3N0',
                                 'db'=>'ZXNkbl90ZXN0X2Ri'
-                                );
-
-//change the following as per user previliges
-//    static $view_user = array(
-//                                'user'=>'esdn_user',
-//                                'key'=>'esdn_password!2',
-//                                'host'=>'localhost',
-//                                'db'=>'esdn_test_db'
-//                                );
-//    static $dba_user = array(
-//                                'user'=>'esdn_user',
-//                                'key'=>'esdn_password!2',
-//                                'host'=>'localhost',
-//                                'db'=>'esdn_test_db'
-//                                );
-    
+                                );   
 }

@@ -8,7 +8,7 @@
                 parent::__construct(base64_decode($db_details_ary["user"]), base64_decode($db_details_ary["key"]), base64_decode($db_details_ary["host"]), base64_decode($db_details_ary["db"]));                
             }else{
                 echo("Invalid User Attempt To Database! ::Parent::");
-print_r($db_details_ary);
+                //print_r($db_details_ary);
                 exit();
             }
         }catch(Exception $exc){
